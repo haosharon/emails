@@ -25,7 +25,7 @@ requirejs.config({
 requirejs(["core/celestrium"], function(Celestrium) {
 
   var dataProvider = new function() {
-    this.minThreshold = 0.75;
+    //this.minThreshold = 0.75;
     this.getLinks = function(node, nodes, callback) {
       var data = {
         node: JSON.stringify(node),

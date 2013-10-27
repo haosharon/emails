@@ -39,7 +39,6 @@ def createCleanJsonFile(filename):
                     email[key] = vals
                 else:
                     email[key] = val
-        print email
         emails.append(email)
 
     final_json = {'emails': emails}
