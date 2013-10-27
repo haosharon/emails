@@ -37,7 +37,6 @@ requirejs(["core/celestrium"], function(Celestrium) {
     this.getLinkedNodes = function(nodes, callback) {
       var data = {
         nodes: JSON.stringify(nodes),
-        minStrength: this.minThreshold,
       };
       this.ajax('get_related_nodes', data, callback);
     };
@@ -54,14 +53,6 @@ requirejs(["core/celestrium"], function(Celestrium) {
   Celestrium.createWorkspace({
     el: document.querySelector("#workspace"),
     dataProvider: dataProvider,
-    nodePrefetch: "get_nodes",
-    nodeAttributes: {
-      conceptText: {
-        type: "nominal",
-        getValue: function(node) {
-          return node.text;
-        },
-      },
-    },
+    nodePrefetch: "get_nodes"
   });
 });

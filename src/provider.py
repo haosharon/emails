@@ -7,31 +7,34 @@ class EmailProvider(object):
     self.emails = data['emails']
 
     nodes_set = {} # users
-    self.links = [] # emails
+    self.edges = [] # emails
     for email in self.emails:
       from_field = email['From']
       to_field = email['To']
       # add these users as nodes
       nodes_set[to_field] = True
       nodes_set[from_field] = True
-      self.links.append((from_field, to_field))
+      self.edges.append((from_field, to_field))
       if 'Cc' in email:
         cc_field = email['Cc']
         nodes_set[cc_field] = True
-        self.links.append((from_field, cc_field))
+        self.edges.append((from_field, cc_field))
 
     self.nodes = nodes_set.keys()
 
   def get_nodes(self):
+    print 'getting nodes'
     return [n for n in self.nodes]
 
   def get_edges(self, node, otherNodes):
+    print 'getting edge'
+    print node
     edges = []
     for otherNode in otherNodes:
       for edge in self.edges:
-        if node == edge[0] and otherNode == edge[1]:
+        if node['text'] == edge[0] and otherNode['text'] == edge[1]:
           edges.append(edge)
-        elif node == edge[1] and otherNode == edge[0]:
+        elif node['text'] == edge[1] and otherNode['text'] == edge[0]:
           edges.append(edge)
 
     return edges
