@@ -7,7 +7,8 @@ We want to create JSON file of the form:
         {
             Sent: true
             From: 'blah',
-            To: 'blah',
+            Cc: ['blah1', 'blah2'],
+            To: ['blah1', 'blah2'],
             Time: 'blah'
         },
     ]
@@ -33,8 +34,12 @@ def createCleanJsonFile(filename):
             if len(split) == 2:
                 key = split[0].strip()
                 val = split[1].strip()
-                if len(val) > 0:
+                if key == 'To' or key == 'Cc':
+                    vals = val.split(',')
+                    email[key] = vals
+                else:
                     email[key] = val
+        print email
         emails.append(email)
 
     final_json = {'emails': emails}

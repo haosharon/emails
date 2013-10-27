@@ -10,25 +10,28 @@ class EmailProvider(object):
     self.edges = [] # emails
     for email in self.emails:
       from_field = email['From']
-      to_field = email['To']
+      to_fields = email['To']
       # add these users as nodes
-      nodes_set[to_field] = True
       nodes_set[from_field] = True
-      self.edges.append((from_field, to_field))
+
+      # add to users and edges
+      for to in to_fields:
+        nodes_set[to] = True
+        self.edges.append((from_field, to))
+
+      # add cc users and edges
       if 'Cc' in email:
-        cc_field = email['Cc']
-        nodes_set[cc_field] = True
-        self.edges.append((from_field, cc_field))
+        cc_fields = email['Cc']
+        for cc in cc_fields:
+          nodes_set[cc] = True
+          self.edges.append((from_field, cc))
 
     self.nodes = nodes_set.keys()
 
   def get_nodes(self):
-    print 'getting nodes'
     return [n for n in self.nodes]
 
   def get_edges(self, node, otherNodes):
-    print 'getting edge'
-    print node
     edges = []
     for otherNode in otherNodes:
       for edge in self.edges:
