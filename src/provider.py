@@ -1,35 +1,27 @@
-import json, os
+import json
 
 class EmailProvider(object):
   def __init__(self):
     f = open('src/data/0_json.json', 'r')
     data = json.loads(f.readline())
     self.emails = data['emails']
-
     self.nodes = set() # users
-    self.edges = set() # emails
+    self.edges = {}    # emails - self.edges[sender][recipient]=True if exists
     for email in self.emails:
       from_field = email['From'].strip()
       if len(from_field) > 0:
-        to_fields = email['To']
-        # add these users as nodes
         self.nodes.add(from_field)
-
-        # add to users and edges
-        for to in to_fields:
-          to = to.strip()
-          if len(to) > 0:
-            self.nodes.add(to)
-            self.edges.add((from_field, to))
-
-        # add cc users and edges
-        if 'Cc' in email:
-          cc_fields = email['Cc']
-          for cc in cc_fields:
-            cc = cc.strip()
-            if len(cc) > 0:
-              self.nodes.add(cc)
-              self.edges.add((from_field, cc))
+        for recipients in email.get('Cc', []), email.get('To', []):
+          for recipient in recipients:
+            recipient = recipient.strip()
+            if len(recipient) > 0:
+              self.nodes.add(recipient)
+              # could put arbitary data here instead of just True
+              # could only put one direction to make directed graph
+              self.edges.setdefault(from_field, {})
+              self.edges[from_field][recipient] = True
+              self.edges.setdefault(recipient, {})
+              self.edges[recipient][from_field] = True
 
   def get_nodes(self):
     return [n for n in self.nodes]
@@ -39,25 +31,16 @@ class EmailProvider(object):
     strengths = []
     for otherNode in otherNodes:
       val = 0
-      for edge in self.edges:
-        if node["text"] == edge[0] and otherNode['text'] == edge[1]:
-          val = 0.9
-          break
-        elif node["text"] == edge[1] and otherNode['text'] == edge[0]:
-          val = 0.9
-          break
+      a, b = node["text"], otherNode["text"]
+      if b in self.edges[a] or a in self.edges[b]:
+        val = 0.9
       strengths.append(val)
-
     return strengths
 
   def get_related_nodes(self, nodes):
-    related_set = {}
+    related = set()
     for node in nodes:
       # for now, just add all users that have corresponded
-      for edge in self.edges:
-        if node['text'] == edge[0]:
-          related_set[edge[1]] = True
-        elif node['text'] == edge[1]:
-          related_set[edge[0]] = True
-
-    return related_set.keys()
+      for recipient in self.edges[node["text"]]:
+        related.add(recipient)
+    return list(related)
