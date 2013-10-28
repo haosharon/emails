@@ -6,21 +6,21 @@ class EmailProvider(object):
     data = json.loads(f.readline())
     self.emails = data['emails']
 
-    nodes_set = {} # users
-    self.edges = [] # emails
+    self.nodes = set() # users
+    self.edges = set() # emails
     for email in self.emails:
       from_field = email['From'].strip()
       if len(from_field) > 0:
         to_fields = email['To']
         # add these users as nodes
-        nodes_set[from_field] = True
+        self.nodes.add(from_field)
 
         # add to users and edges
         for to in to_fields:
           to = to.strip()
           if len(to) > 0:
-            nodes_set[to] = True
-            self.edges.append((from_field, to))
+            self.nodes.add(to)
+            self.edges.add((from_field, to))
 
         # add cc users and edges
         if 'Cc' in email:
@@ -28,10 +28,8 @@ class EmailProvider(object):
           for cc in cc_fields:
             cc = cc.strip()
             if len(cc) > 0:
-              nodes_set[cc] = True
-              self.edges.append((from_field, cc))
-
-    self.nodes = nodes_set.keys()
+              self.nodes.add(cc)
+              self.edges.add((from_field, cc))
 
   def get_nodes(self):
     return [n for n in self.nodes]
@@ -42,11 +40,11 @@ class EmailProvider(object):
     for otherNode in otherNodes:
       val = 0
       for edge in self.edges:
-        if node == edge[0] and otherNode['text'] == edge[1]:
-          val = 1
+        if node["text"] == edge[0] and otherNode['text'] == edge[1]:
+          val = 0.9
           break
-        elif node == edge[1] and otherNode['text'] == edge[0]:
-          val = 1
+        elif node["text"] == edge[1] and otherNode['text'] == edge[0]:
+          val = 0.9
           break
       strengths.append(val)
 
