@@ -66,6 +66,7 @@ require ["Celestrium"], (Celestrium) ->
       "NodeDetails": {}
       "LinkDistribution": {}
       #"LinkDistributionNormalizer": {}
+    SelectionLayer: {}
 
     # provides functinos to retreive nodes and links
     # relative present ones
