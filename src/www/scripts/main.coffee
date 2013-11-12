@@ -67,6 +67,8 @@ require ["Celestrium"], (Celestrium) ->
       "LinkDistribution": {}
       #"LinkDistributionNormalizer": {}
 
+    "SelectionLayer": {}
+
     # provides functinos to retreive nodes and links
     # relative present ones
     "local/ExampleDataProvider": {}
