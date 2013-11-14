@@ -1,7 +1,7 @@
 import os, sys, cherrypy, provider
 import simplejson as json
 
-'''USAGE: python src/server.py <knowledgebase-uri> <num-axes> <concepts|assertions> <port>'''
+'''USAGE: python src/server.py <port>'''
 
 portStr = sys.argv[1]
 
