@@ -56,18 +56,22 @@ require ["Celestrium"], (Celestrium) ->
     # renders the graph using d3's force directedlayout
     GraphView: {}
 
-    "Sliders": {}
-    "ForceSliders": {}
+    Sliders:
+      pluginOrder: 1
+    ForceSliders: {}
 
-    "NodeSearch":
-        prefetch: "get_nodes"
-      "Stats": {}
-      "NodeSelection": {}
-      "NodeDetails": {}
-      "LinkDistribution": {}
-      #"LinkDistributionNormalizer": {}
+    NodeSearch:
+      prefetch: "get_nodes"
+      pluginOrder: 0
+    Stats:
+      pluginOrder: 2
+    NodeSelection: {}
+    NodeDetails: {}
+    LinkDistribution:
+      pluginOrder: 3
+    #"LinkDistributionNormalizer": {}
 
-    "SelectionLayer": {}
+    SelectionLayer: {}
 
     # provides functinos to retreive nodes and links
     # relative present ones
