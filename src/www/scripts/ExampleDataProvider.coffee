@@ -39,13 +39,7 @@ define ["DataProvider"], (DataProvider) ->
         otherNodes: JSON.stringify(nodes)
       @ajax "get_edges", data, (links) ->
         callback _.map links, (link, i) ->
-          console.log link
           return link
-          # 'strength': coeff
-          # 'direction': _.sample [null, 'forward', 'backward', 'bidirectional']
-        # callback _.map arrayOfCoeffs, (coeffs, i) ->
-        #   coeffs: coeffs
-        #   base_value: coeffs
 
     getLinkedNodes: (nodes, callback) ->
       data =
